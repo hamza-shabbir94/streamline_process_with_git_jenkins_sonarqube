@@ -22,7 +22,7 @@ AWS.config.update({ region: 'eu-central-1' });
     conn = await mysql.createConnection({
       host: 'testdb.ctueoqes4434.eu-central-1.rds.amazonaws.com',
       port: 3306,
-      database: 'testdb',
+      database: 'mysql',
       user: 'admin',
       password,
       ssl: { rejectUnauthorized: false, ca: require('fs').readFileSync('./global-bundle.pem') }
