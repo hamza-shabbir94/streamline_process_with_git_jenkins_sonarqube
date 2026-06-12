@@ -13,7 +13,6 @@ pipeline {
     }
 
     stages {
-        stages {
         stage('Build') {
             steps {
                 // Your existing build steps
@@ -69,6 +68,5 @@ pipeline {
             }
         }
         
-}
 }
 }
