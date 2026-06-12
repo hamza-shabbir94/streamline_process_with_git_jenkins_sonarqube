@@ -21,7 +21,7 @@ pipeline {
                             ${SCANNER_HOME}/bin/sonar-scanner \
                             -Dsonar.token=${SONAR_TOKEN} \
                             -Dsonar.projectKey=hamza-shabbir94_streamline_process_with_git_jenkins_sonarqube \
-                            -Dsonar.organization=hamza-shabbir94
+                            -Dsonar.organization=hamza-shabbir94 \
                             -Dsonar.host.url=https://sonarcloud.io
                         '''
                     }
