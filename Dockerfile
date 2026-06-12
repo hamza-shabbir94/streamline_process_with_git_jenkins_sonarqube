@@ -8,6 +8,8 @@ RUN npm install
 RUN npm install mysql2
 RUN npm install aws-sdk
 
+COPY global-bundle.pem ./
+
 COPY . .
 
 EXPOSE 3000
