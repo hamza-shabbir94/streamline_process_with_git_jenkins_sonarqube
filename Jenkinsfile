@@ -5,7 +5,7 @@ pipeline {
         SONAR_CRED_ID = 'SONAR_TOKEN' 
         SCANNER_HOME = tool 'sonar-scanner'
     }
-
+//    tools {
     stages {
         stage('Build') {
             steps {
