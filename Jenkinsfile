@@ -6,10 +6,8 @@ pipeline {
     
 
     environment {
+        SONAR_CRED_ID = 'SONAR_TOKEN' 
         SCANNER_HOME = tool 'sonar-scanner'
-        SONAR_TOKEN = credentials('sonar-token')
-        SONAR_ORGANIZATION = 'jenkins-project-123'
-        SONAR_PROJECT_KEY = 'jenkins-project-123_ci-jenkins'
     }
 
     stages {
@@ -21,11 +19,15 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                // Use the name you defined in "Configure System"
-                withSonarQubeEnv('MySonarQube') {
-                    // Run the scan command
-                    // Note: Use the project key and organization from your screenshot
-                    sh 'sonar-scanner -Dsonar.projectKey=hamza-shabbir94_streamline_process_with_git_jenkins_sonarqube -Dsonar.organization=hamza-shabbir94'
+                // This fetches the secret from Jenkins and maps it to the SONAR_TOKEN variable
+                withCredentials([string(credentialsId: "${env.SONAR_CRED_ID}", variable: 'SONAR_TOKEN')]) {
+                    withSonarQubeEnv('MySonarQube') {
+                    sh '''
+                        ${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.token=${SONAR_TOKEN} \
+                        -Dsonar.projectKey=hamza-shabbir94_streamline_process_with_git_jenkins_sonarqube \
+                        -Dsonar.organization=hamza-shabbir94
+                    '''
                 }
             }
         }
@@ -68,5 +70,6 @@ pipeline {
             }
         }
         
+}
 }
 }
