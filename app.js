@@ -3,6 +3,7 @@ const mysql = require('mysql2/promise');
 const AWS = require('aws-sdk');
 const bodyParser = require('body-parser');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,30 +14,41 @@ const port = 3000;
 // Create connection to MySQL
 AWS.config.update({ region: 'eu-central-1' });
 
-(async () => {
-  let password = 'password1';
-  
-
-  let conn;
-  try {
-    conn = await mysql.createConnection({
-      host: 'testdb.ctueoqes4434.eu-central-1.rds.amazonaws.com',
-      port: 3306,
-      database: 'testdb',
-      user: 'root',
-      password,
-      ssl: { rejectUnauthorized: false, ca: require('fs').readFileSync('./global-bundle.pem') }
-    });
-
-    const [rows] = await conn.execute('SELECT VERSION() AS v');
-    console.log(rows[0].v);
-  } catch (error) {
-    console.error('Database error:', error);
-    throw error;
-  } finally {
-    if (conn) await conn.end();
-  }
-})().catch(console.error);
+//(async () => {
+//  let password = 'password1';
+//  
+//
+//  let conn;
+//  try {
+//    conn = await mysql.createConnection({
+//      host: 'testdb.ctueoqes4434.eu-central-1.rds.amazonaws.com',
+//      port: 3306,
+//      database: 'mysql',
+//      user: 'admin',
+//      password,
+//      ssl: { rejectUnauthorized: false, ca: require('fs').readFileSync('./global-bundle.pem') }
+//    });
+//
+//    const [rows] = await conn.execute('SELECT VERSION() AS v');
+//    console.log(rows[0].v);
+//  } catch (error) {
+//    console.error('Database error:', error);
+//    throw error;
+//  } finally {
+//    if (conn) await conn.end();
+//  }
+//})().catch(console.error);
+const pool = mysql.createPool({
+    host: 'testdb.ctueoqes4434.eu-central-1.rds.amazonaws.com',
+    port: 3306,
+    database: 'testdb', // Ensure this is your app database, not 'mysql'
+    user: 'admin',
+    password: 'password1',
+    ssl: { 
+        rejectUnauthorized: false, 
+        ca: fs.readFileSync(path.join(__dirname, 'global-bundle.pem')) 
+    }
+});
 
 // Connect to MySQL
 db.connect((err) => {
