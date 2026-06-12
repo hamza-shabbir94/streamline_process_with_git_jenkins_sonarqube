@@ -51,12 +51,12 @@ const pool = mysql.createPool({
 });
 
 // Connect to MySQL
-db.connect((err) => {
-    if (err) {
-        throw err;
-    }
-    console.log('MySQL Connected...');
-});
+//db.connect((err) => {
+//    if (err) {
+//        throw err;
+//    }
+//    console.log('MySQL Connected...');
+//});
 
 // Serve the HTML file
 app.get('/', (req, res) => {
