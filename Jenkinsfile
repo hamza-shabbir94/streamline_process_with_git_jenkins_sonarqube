@@ -13,6 +13,23 @@ pipeline {
     }
 
     stages {
+        stages {
+        stage('Build') {
+            steps {
+                // Your existing build steps
+                sh 'npm install'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                // Use the name you defined in "Configure System"
+                withSonarQubeEnv('MySonarQube') {
+                    // Run the scan command
+                    // Note: Use the project key and organization from your screenshot
+                    sh 'sonar-scanner -Dsonar.projectKey=hamza-shabbir94_streamline_process_with_git_jenkins_sonarqube -Dsonar.organization=hamza-shabbir94'
+                }
+            }
+        }
         
         stage('Code-Analysis') {
             steps {
