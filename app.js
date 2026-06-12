@@ -1,5 +1,6 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2/promise');
+const AWS = require('aws-sdk');
 const bodyParser = require('body-parser');
 const path = require('path');
 
@@ -10,12 +11,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 const port = 3000;
 
 // Create connection to MySQL
-const db = mysql.createConnection({
-    host: 'testdb.ctueoqes4434.eu-central-1.rds.amazonaws.com',
-    user: 'admin',
-    password: 'password1',
-    database: 'testdb'
-});
+AWS.config.update({ region: 'eu-central-1' });
+
+(async () => {
+  let password = 'password1';
+  
+
+  let conn;
+  try {
+    conn = await mysql.createConnection({
+      host: 'testdb.ctueoqes4434.eu-central-1.rds.amazonaws.com',
+      port: 3306,
+      database: 'mysql',
+      user: 'admin',
+      password,
+      ssl: { rejectUnauthorized: false, ca: require('fs').readFileSync('./global-bundle.pem') }
+    });
+
+    const [rows] = await conn.execute('SELECT VERSION() AS v');
+    console.log(rows[0].v);
+  } catch (error) {
+    console.error('Database error:', error);
+    throw error;
+  } finally {
+    if (conn) await conn.end();
+  }
+})().catch(console.error);
 
 // Connect to MySQL
 db.connect((err) => {
